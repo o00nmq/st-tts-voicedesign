@@ -1,0 +1,6 @@
+.playwright-cli/
+.DS_Store
+_ui.png
+*.log
+node_modules/
+.dev-notes.md
