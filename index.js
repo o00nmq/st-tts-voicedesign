@@ -101,21 +101,18 @@ function readBase() {
  *  去 markdown 标记（**粗* _斜_ `码`）——对齐渲染后的 DOM 文本（缓存命中）、也不让 TTS 念出星号。正文标签模式只需要这一层。 */
 function speakClean(s) {
     return String(s || "")
+        // 先剔除「看不见的块」——注意 CoT 注释/折叠块也可能出现在正文标签(如 <scenario>)内部，必须在去标签壳之前先删
+        .replace(/<!--[\s\S]*?-->/g, " ")                       // CoT 注释（含 <!--muse--> 之类）
+        .replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, " ")          // 代码块
+        .replace(/<details[\s\S]*?<\/details>/gi, " ")          // 折叠块（状态栏/小剧场/变量更新）
+        .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ")
         .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")                  // 图片
         .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")                // 链接 → 只留链接文字
-        .replace(/<[^>]+>/g, " ")                               // 标签去壳（含 <tts>，留里面的 cue 文本）
+        .replace(/<[^>]+>/g, " ")                               // 其余标签去壳（含 <tts>，留里面的 cue 文本）
         .replace(/[*_~`]+/g, "")                                // 强调/行内代码 标记
         .replace(/\s+/g, " ").trim();
 }
-
-/** 无正文标签的兜底（读整条）：先剔除看不见的块——CoT 注释/代码块/折叠块（状态栏/小剧场/变量更新）——再 speakClean */
-function stripHidden(s) {
-    return speakClean(String(s || "")
-        .replace(/<!--[\s\S]*?-->/g, " ")
-        .replace(/```[\s\S]*?```|~~~[\s\S]*?~~~/g, " ")
-        .replace(/<details[\s\S]*?<\/details>/gi, " ")
-        .replace(/<(script|style)[\s\S]*?<\/\1>/gi, " "));
-}
+const stripHidden = speakClean;   // 现在一套清理，两条路径共用（正文标签内/整条都要剔 CoT/折叠）
 
 /** 流式期间：砍掉结尾「未闭合」的构造（注释/代码块/details/半个标签），避免把没写完的内容当成稳定句子去合成 */
 function dropUnclosedTail(s) {

@@ -37,3 +37,7 @@ Femiris 可以直接用 **[docs/preset/femiris-tts-prompt.md](docs/preset/femiri
 ## 提醒
 
 官方API有内容过滤，有特殊需求可以考虑自己部署
+
+## License
+
+[WTFPL v2](LICENSE)
