@@ -1,16 +1,16 @@
 /* ── 消息里的播放器：播放/停止 + 自动播放开关 + 实时倍速 + 缓冲进度 ── */
-/* box 在 .mes_block 内，会被头像挤偏 → translateX(--mimo-shift, JS 量) 拉回整条消息中心；pointer-events 让空白区不挡点击 */
-.mimo-tts-box {
+/* box 在 .mes_block 内，会被头像挤偏 → translateX(--vd-shift, JS 量) 拉回整条消息中心；pointer-events 让空白区不挡点击 */
+.vd-tts-box {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     box-sizing: border-box;
     margin: 8px 0 2px;
-    transform: translateX(var(--mimo-shift, 0px));
+    transform: translateX(var(--vd-shift, 0px));
     pointer-events: none;
 }
-.mimo-tts-bar {
+.vd-tts-bar {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -23,7 +23,7 @@
     border: 1px solid var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.08));
     pointer-events: auto;
 }
-.mimo-tts-box button.menu_button {
+.vd-tts-box button.menu_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -37,81 +37,86 @@
     opacity: 0.75;
     flex: 0 0 auto;
 }
-.mimo-tts-box button.menu_button:hover { opacity: 1; }
-.mimo-tts-box.playing .mimo-tts-btn {
+.vd-tts-box button.menu_button:hover { opacity: 1; }
+.vd-tts-box.playing .vd-tts-btn {
     opacity: 1;
     color: #e57373;
-    animation: mimo-pulse 1.1s ease-in-out infinite;
+    animation: vd-pulse 1.1s ease-in-out infinite;
 }
-.mimo-auto-btn.on { opacity: 1; color: #66bb6a; }   /* 自动播放开：绿色高亮 */
-@keyframes mimo-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
+.vd-auto-btn.on { opacity: 1; color: #66bb6a; }   /* 自动播放开：绿色高亮 */
+.vd-hl-btn.on { opacity: 1; color: #ffca28; }      /* 高亮当前朗读段开：琥珀色 */
+@keyframes vd-pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
 
 /* 播放时才展开：倍速滑条 + 进度 */
-.mimo-player { display: none; align-items: center; gap: 6px; }
-.mimo-tts-box.playing .mimo-player { display: inline-flex; }
-.mimo-rate-ico { opacity: 0.6; font-size: 0.85em; }
-.mimo-player input[type="range"].mimo-rate {
+.vd-player { display: none; align-items: center; gap: 6px; }
+.vd-tts-box.playing .vd-player { display: inline-flex; }
+.vd-rate-ico { opacity: 0.6; font-size: 0.85em; }
+.vd-player input[type="range"].vd-rate {
     width: 92px;
     margin: 0;
     cursor: pointer;
     vertical-align: middle;
 }
-.mimo-rate-val {
+.vd-rate-val {
     font-size: 0.8em;
     opacity: 0.85;
     min-width: 2.6em;
     font-variant-numeric: tabular-nums;
 }
-.mimo-status {
+.vd-status {
     font-size: 0.8em;
     opacity: 0.7;
     min-width: 4.2em;
     text-align: center;
 }
 
-/* 表演 cue：Regex 把 <tts>…</tts> 替成 <span class="mimo-cue">…</span>（ST 会加前缀）。
+/* 表演 cue：Regex 把 <tts>…</tts> 替成 <span class="vd-cue">…</span>（ST 会加前缀）。
    显示层隐藏，但扩展朗读时会收进去。 */
-.mimo-cue,
-.custom-mimo-cue {
+.vd-cue,
+.custom-vd-cue {
     display: none !important;
 }
 
 /* ── 扩展设置面板 ── */
-.mimo-tts-settings .mimo-body {
+.vd-tts-settings .vd-body {
     display: flex;
     flex-direction: column;
     gap: 12px;
     padding-top: 4px;
 }
-.mimo-tts-settings .inline-drawer-header b {
+.vd-tts-settings .inline-drawer-header b {
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-.mimo-tts-settings .mimo-toggles {
+.vd-tts-settings .vd-toggles {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
 }
-.mimo-tts-settings .checkbox_label {
+.vd-tts-settings .checkbox_label {
     display: flex;
     align-items: center;
     gap: 6px;
 }
-.mimo-tts-settings .mimo-num {
+.vd-tts-settings .vd-num {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 0.85em;
 }
-.mimo-tts-settings .mimo-num input {
+.vd-tts-settings .vd-num input {
     width: 52px;
+    padding: 2px 6px;
+}
+.vd-tts-settings .vd-num select {
+    width: auto;
     padding: 2px 6px;
 }
 
 /* section */
-.mimo-tts-settings .mimo-sec {
+.vd-tts-settings .vd-sec {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -120,26 +125,26 @@
     border-radius: 8px;
     background: var(--black30a, rgba(0, 0, 0, 0.15));
 }
-.mimo-tts-settings .mimo-sec-head {
+.vd-tts-settings .vd-sec-head {
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 600;
     opacity: 0.95;
 }
-.mimo-tts-settings .mimo-sec-head > span { flex: 1; }
-.mimo-tts-settings .mimo-dot {
+.vd-tts-settings .vd-sec-head > span { flex: 1; }
+.vd-tts-settings .vd-dot {
     font-size: 0.6em;
     color: var(--SmartThemeBodyColor, #888);
     opacity: 0.35;
 }
-.mimo-tts-settings .mimo-dot.on {
+.vd-tts-settings .vd-dot.on {
     color: #4caf50;
     opacity: 1;
 }
 
 /* base 编辑框 */
-.mimo-tts-settings .mimo-base-edit {
+.vd-tts-settings .vd-base-edit {
     width: 100%;
     font-size: 0.9em;
     line-height: 1.5;
@@ -147,13 +152,13 @@
 }
 
 /* button row */
-.mimo-tts-settings .mimo-btnrow {
+.vd-tts-settings .vd-btnrow {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 8px;
 }
-.mimo-tts-settings .menu_button {
+.vd-tts-settings .menu_button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -163,28 +168,55 @@
     flex: 0 0 auto;
     white-space: nowrap;
 }
-.mimo-tts-settings .menu_button .lbl { white-space: nowrap; }
+.vd-tts-settings .menu_button .lbl { white-space: nowrap; }
 
 /* labelled fields */
-.mimo-tts-settings .mimo-field {
+.vd-tts-settings .vd-field {
     display: flex;
     flex-direction: column;
     gap: 3px;
     font-size: 0.85em;
 }
-.mimo-tts-settings .mimo-field > span { opacity: 0.85; }
-.mimo-tts-settings input[type="range"] { width: 100%; }
-.mimo-tts-settings #mimo_rate_val { opacity: 0.7; font-weight: normal; }
-.mimo-tts-settings .mimo-grow { flex: 1; }
+.vd-tts-settings .vd-field > span { opacity: 0.85; }
+.vd-tts-settings input[type="range"] { width: 100%; }
+.vd-tts-settings #vd_rate_val { opacity: 0.7; font-weight: normal; }
+.vd-tts-settings .vd-grow { flex: 1; }
 
-.mimo-tts-settings .mimo-hint {
+.vd-tts-settings .vd-hint {
     font-size: 0.8em;
     line-height: 1.5;
     opacity: 0.65;
 }
-.mimo-tts-settings .mimo-hint code {
+.vd-tts-settings .vd-hint code {
     font-size: 0.95em;
     padding: 0 3px;
     border-radius: 3px;
     background: var(--black50a, rgba(0, 0, 0, 0.3));
+}
+.vd-tts-settings .vd-hint a { color: inherit; text-decoration: underline; }
+
+/* Fish 设计音色 子块 */
+.vd-tts-settings .vd-design {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 10px;
+    border: 1px dashed var(--SmartThemeBorderColor, rgba(255, 255, 255, 0.18));
+    border-radius: 8px;
+}
+.vd-tts-settings .vd-design-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85em;
+    opacity: 0.9;
+}
+.vd-tts-settings #vd_fish_design_status { min-height: 1.2em; }
+
+/* 朗读高亮：当前朗读段（CSS Custom Highlight API，非侵入、不改 DOM）。
+   极淡遮罩、跟随主题底色：拿正文色（--SmartThemeBodyColor）兑一点透明——
+   亮主题→淡暗遮罩、暗主题→淡亮遮罩，两边都能看清又不抢阅读；不加下划线等抢眼装饰。 */
+::highlight(vd-reading) {
+    background-color: rgba(128, 128, 128, 0.22);   /* 兜底：浏览器不支持 color-mix 时用中性灰遮罩 */
+    background-color: color-mix(in srgb, var(--SmartThemeBodyColor, #808080) 15%, transparent);
 }

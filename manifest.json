@@ -1,12 +1,12 @@
 {
-    "display_name": "MiMo TTS (voicedesign)",
+    "display_name": "TTS VoiceDesign (MiMo / Fish)",
     "loading_order": 20,
     "requires": [],
     "optional": [],
     "js": "index.js",
     "css": "style.css",
     "author": "",
-    "version": "1.0.0",
+    "version": "2.1.0",
     "homePage": "",
     "auto_update": false
 }
