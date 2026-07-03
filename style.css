@@ -70,13 +70,6 @@
     text-align: center;
 }
 
-/* 表演 cue：Regex 把 <tts>…</tts> 替成 <span class="vd-cue">…</span>（ST 会加前缀）。
-   显示层隐藏，但扩展朗读时会收进去。 */
-.vd-cue,
-.custom-vd-cue {
-    display: none !important;
-}
-
 /* ── 扩展设置面板 ── */
 .vd-tts-settings .vd-body {
     display: flex;

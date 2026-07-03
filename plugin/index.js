@@ -26,13 +26,13 @@ const TIMEOUT_MS = 150000;
 async function forwardToFish(payload) {
     const {
         endpoint, apiKey, model, reference_id, text,
-        format, mp3_bitrate, opus_bitrate, latency, temperature, top_p,
-        chunk_length, normalize, prosody, seed,
+        format, mp3_bitrate, opus_bitrate, latency, temperature, top_p, repetition_penalty,
+        chunk_length, normalize, prosody,
     } = payload || {};
 
     if (!apiKey) { const e = new Error("missing apiKey"); e.status = 400; throw e; }
     if (!text) { const e = new Error("missing text"); e.status = 400; throw e; }
-    // reference_id 可选：有就用指定音色模型，无则用 Fish 默认音色（由 seed 固定）
+    // reference_id 可选：有就用指定音色模型，无则用 Fish 默认音色
 
     const base = String(endpoint || DEFAULT_ENDPOINT).replace(/\/+$/, "");
     const body = { text: String(text), format: format || "mp3" };
@@ -42,7 +42,7 @@ async function forwardToFish(payload) {
     if (latency) body.latency = latency;
     if (temperature != null && temperature !== "" && !Number.isNaN(Number(temperature))) body.temperature = Number(temperature);
     if (top_p != null && top_p !== "" && !Number.isNaN(Number(top_p))) body.top_p = Number(top_p);
-    if (seed != null && seed !== "" && !Number.isNaN(Number(seed))) body.seed = Number(seed);
+    if (repetition_penalty != null && repetition_penalty !== "" && !Number.isNaN(Number(repetition_penalty))) body.repetition_penalty = Number(repetition_penalty);
     if (chunk_length) body.chunk_length = Number(chunk_length);
     if (typeof normalize === "boolean") body.normalize = normalize;
     if (prosody && typeof prosody === "object") body.prosody = prosody;
