@@ -4,8 +4,8 @@
 
 ## 支持的API端点
 
-MiMo TTS
-Fish Audio
+- MiMo TTS
+- Fish Audio
 
 ## 组成
 
